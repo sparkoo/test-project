@@ -1,0 +1,38 @@
+{
+  "printJob": {
+    "jobGuid": "3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+    "jobTitle": "jobTitle",
+    "fileName": "filename",
+    "fileSize": 1,
+    "spoolerGuid": "3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+    "jobProperties": {
+      "pageCount": 1,
+      "isDuplex": true,
+      "jobLanguages": []
+    },
+    "finishingOptions": {
+      "forceBW": true,
+      "forceDuplex": true,
+      "watermark": {
+        "text": "t",
+        "color": "#123456",
+        "fontSize": 1,
+        "rotation": 1,
+        "position": "BottomCenter"
+      },
+      "copies": 1
+    },
+    "copies": 1
+  },
+  "user": {
+    "userName": "username",
+    "displayName": "displayname"
+  },
+  "printer": {
+    "hostName": "hostName",
+    "port": 1,
+    "vendor": "vendor",
+    "deliveryMethod": "Lpr",
+    "queueName": "queue"
+  }
+}

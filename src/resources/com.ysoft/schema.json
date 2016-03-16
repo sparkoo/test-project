@@ -1,0 +1,203 @@
+{
+  "$schema": "http://json-schema.org/draft-03/schema#",
+  "title": "PrintRequest",
+  "description": "PrintRequest contains all information needed by the Spooler to print the job.",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "UUID": {
+      "description": "Unique identification. It's 128-bit UUID by RFC 4122.",
+      "type": "string",
+      "required": true,
+      "minLength": 36,
+      "maxLength": 36,
+      "pattern": "[A-Fa-f0-9]{8}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{4}-[A-Fa-f0-9]{12}"
+    }
+  },
+  "properties": {
+    "printJob": {
+      "description": "Job that is printed.",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "spoolerGuid": {
+          "description": "Unique identification of the spooler.",
+          "$ref": "#/definitions/UUID",
+          "required": true
+        },
+
+        "jobGuid": {
+          "description": "Unique identification of the print job.",
+          "$ref": "#/definitions/UUID",
+          "required": true
+        },
+
+        "jobTitle": {
+          "description": "Title of the print job",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 255
+        },
+
+        "fileName": {
+          "description": "Name of the print file.",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 1024
+        },
+
+        "fileSize": {
+          "description": "Size of the print file.",
+          "type": "integer",
+          "required": true,
+          "minimum": 1
+        },
+
+        "finishingOptions": {
+          "description": "Additional options that alter the way the job is printed.",
+          "type": "object",
+          "required": true,
+          "additionalProperties": false,
+          "properties": {
+            "forceBW": {
+              "description": "If true, the print job will be printed as black/white",
+              "type": "boolean",
+              "required": true,
+              "default": false
+            },
+            "forceDuplex": {
+              "description": "If true, the print job will be printed on both sides.",
+              "type": "boolean",
+              "required": true,
+              "default": false
+            },
+            "watermark": {
+              "title": "Watermark on the page",
+              "description": "Information about the position, shape and text of the watermark.",
+              "type": "object",
+              "required": true,
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "required": true,
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "color": {
+                  "type": "string",
+                  "required": true,
+                  "minLength": 7,
+                  "maxLength": 7,
+                  "pattern": "#[0-9a-fA-F]{6}"
+                },
+                "fontSize": {
+                  "type": "integer",
+                  "required": true,
+                  "minimum": 1,
+                  "default": 16
+                },
+                "rotation": {
+                  "type": "integer",
+                  "required": true,
+                  "default": 0
+                },
+                "position": {
+                  "type": "string",
+                  "required": true,
+                  "enum": [ "TopLeft", "TopCenter", "TopRight", "MiddleLeft", "MiddleCenter", "MiddleRight", "BottomLeft", "BottomCenter", "BottomRight" ],
+                  "default": "BottomCenter"
+                }
+              }
+            },
+            "copies": {
+              "description": "Count of printed copies of document",
+              "type": "integer",
+              "required": true,
+              "minimum": 1,
+              "default": 1
+            }
+          }
+        }
+      }
+    },
+
+    "user": {
+      "description": "User, who is trying to print this job",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "userName": {
+          "description": "The name(login) of the user, who sent the print request to the spooler.",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\s]+$"
+        },
+        "displayName": {
+          "description": "Name of the user(first name, surname)",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "ricohUserCode": {
+          "description": "An 8-character long user identifier used for user authentication on Ricoh MFPs.",
+          "type": [ "string", "null" ],
+          "required": false,
+          "minLength": 0,
+          "maxLength": 8
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "printer": {
+      "description": "Information about the printer that the job should be printed on.",
+      "type": "object",
+      "required": true,
+      "properties": {
+        "hostName": {
+          "description": "Host-name or IP4 or IP6 of the printer.",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "port": {
+          "description": "Port of the printer",
+          "type": "integer",
+          "required": true,
+          "minimum": 0,
+          "maximum": 65535,
+          "default": 9100
+        },
+        "vendor": {
+          "description": "Vendor of the printer",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "deliveryMethod": {
+          "description": "Way of delivery of the print job to the printer. Enumeration: Raw, Lpr",
+          "type": "string",
+          "required": true,
+          "enum": [ "Raw", "Lpr" ],
+          "default": "Raw"
+        },
+        "queueName": {
+          "description": "Name of the printer queue - some printers have these, the spooler must know which queue to use for printing.",
+          "type": "string",
+          "required": true,
+          "minLength": 1,
+          "maxLength": 64
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
